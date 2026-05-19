@@ -9,9 +9,9 @@ import { HiOutlineUserGroup } from 'react-icons/hi';
 /* ─── Data ─────────────────────────────────────── */
 const FAMILY = {
   brothers: ['Md Usman', 'Md Rizwan', 'Md Irfan'],
-  sisters:  ['Razia Fatma'],
-  nephews:  ['Ayaan Ahmad', 'Rayyan Ahmad'],
-  address:  'Rampur Saghri, Via Aurai\nDist. Muzaffarpur (Bihar)\nPin — 843312',
+  sisters: ['Razia Fatma'],
+  nephews: ['Ayaan Ahmad', 'Rayyan Ahmad'],
+  address: 'Rampur Saghari, Via Aurai\nDist. Muzaffarpur (Bihar)\nPin — 843312',
 };
 
 /* ─── Animated section heading ──────────────────── */
@@ -25,7 +25,7 @@ function SectionHead({ tag, title, verse, verseRef, inView }) {
       <motion.h2 className="font-playfair font-semibold mb-4"
         style={{ fontSize: 'clamp(2rem,5vw,3rem)' }}
         initial={{ opacity: 0, y: 22 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: .75, delay: .08, ease: [.22,1,.36,1] }}>
+        transition={{ duration: .75, delay: .08, ease: [.22, 1, .36, 1] }}>
         {title}
       </motion.h2>
       {verse && (
@@ -73,7 +73,7 @@ function CatCard({ icon, label, accentColor, children, delay = 0 }) {
       style={{ borderColor: `${accentColor}28` }}
       initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: .65, delay, ease: [.22,1,.36,1] }}
+      transition={{ duration: .65, delay, ease: [.22, 1, .36, 1] }}
     >
       <div className="flex items-center gap-2.5 mb-4">
         <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -115,7 +115,7 @@ export default function GroomFamily({ darkMode }) {
           className="glass-card mb-8 overflow-hidden relative"
           style={{ border: '1px solid rgba(201,168,76,.3)' }}
           initial={{ opacity: 0, y: 32 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: .75, ease: [.22,1,.36,1] }}
+          viewport={{ once: true }} transition={{ duration: .75, ease: [.22, 1, .36, 1] }}
         >
           {/* Tri-colour top bar */}
           <div className="h-1.5"
@@ -186,7 +186,7 @@ export default function GroomFamily({ darkMode }) {
           className="glass-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-5"
           style={{ borderColor: 'rgba(27,107,71,.28)' }}
           initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: .65, delay: .25, ease: [.22,1,.36,1] }}
+          viewport={{ once: true }} transition={{ duration: .65, delay: .25, ease: [.22, 1, .36, 1] }}
         >
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0"
             style={{ background: 'rgba(27,107,71,.08)', border: '1px solid rgba(27,107,71,.22)', color: '#1B6B47' }}>
@@ -206,7 +206,7 @@ export default function GroomFamily({ darkMode }) {
           </div>
 
           <a id="family-map-link"
-            href="https://maps.google.com/?q=Rampur+Saghri+Muzaffarpur+Bihar"
+            href="https://maps.google.com/?q=Rampur+Saghari+Muzaffarpur+Bihar"
             target="_blank" rel="noopener noreferrer"
             className="flex-shrink-0 font-inter text-xs font-semibold tracking-wide transition-all px-4 py-2 rounded-full"
             style={{

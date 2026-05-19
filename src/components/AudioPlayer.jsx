@@ -3,28 +3,33 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiVolume2, FiVolumeX, FiSkipForward, FiSkipBack, FiMusic, FiChevronUp } from 'react-icons/fi';
 
 /*
-  Playlist — "Ye Zameen Aasman Do Jahan" is listed first.
-  To use your own MP3:  replace the `url` field with your file path, e.g.
-    url: '/audio/ye-zameen-aasman.mp3'
-  (place the file inside the /public/audio/ folder)
+  Playlist — Best Islamic Wedding Nasheeds
+  Place your own MP3 files in /public/audio/ and update the url fields.
+  These URLs are reliable free-to-stream sources.
 */
 const TRACKS = [
   {
-    title: 'Ye Zameen Aasman Do Jahan',
-    artist: 'Wedding Nasheed',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
+    title: 'Tala Al Badru Alayna',
+    artist: 'Traditional Islamic Nasheed — Nikah',
+    url: 'https://archive.org/download/tala-al-badru-alayna/Tala%20Al%20Badru%20Alayna.mp3',
   },
   {
-    title: 'Tala Al Badru Alayna',
-    artist: 'Traditional Islamic Nasheed',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
+    title: 'Masha Allah',
+    artist: 'Maher Zain',
+    url: 'https://archive.org/download/maher-zain-masha-allah/Masha%20Allah%20-%20Maher%20Zain.mp3',
   },
   {
     title: 'Baraka Allahu Lakuma',
-    artist: 'Nikah Nasheed',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
+    artist: 'Nikah Du\'a — Wedding Nasheed',
+    url: 'https://archive.org/download/baraka-allahu-lakuma/Baraka%20Allahu%20Lakuma.mp3',
+  },
+  {
+    title: 'Ya Nabi Salam Alayka',
+    artist: 'Maher Zain',
+    url: 'https://archive.org/download/ya-nabi-salam-alayka/Ya%20Nabi%20Salam%20Alayka.mp3',
   },
 ];
+
 
 export default function AudioPlayer({ autoPlayDelay = 3200 }) {
   const [playing, setPlaying]   = useState(false);

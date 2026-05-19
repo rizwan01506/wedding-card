@@ -23,7 +23,7 @@ const STEPS = [
     icon: <BsMoonStarsFill size={22} />,
     title: 'Baraat',
     subtitle: 'Thu, 11 June · After Zuhr Namaaz',
-    description: "The groom's procession arrives at the bride's residence at Village Rampur Saghri in a joyful celebration of lights and blessings after Zuhr prayers.",
+    description: "The groom's procession arrives at the bride's residence at Village Rampur Saghari in a joyful celebration of lights and blessings after Zuhr prayers.",
     color: '#C9A84C',
     bg: 'rgba(201,168,76,0.09)',
     border: 'rgba(201,168,76,0.28)',

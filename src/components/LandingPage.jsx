@@ -1,23 +1,16 @@
 import { useState, useEffect, useId } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const STARS = Array.from({ length: 42 }, (_, i) => ({
+/* ── Floating hearts — very subtle like the reference ── */
+const HEARTS = Array.from({ length: 16 }, (_, i) => ({
   id: i,
-  x: (i * 37.93 + 11.3) % 100,
-  y: (i * 53.71 + 7.6) % 100,
-  size: i % 4 === 0 ? 2.2 : i % 3 === 0 ? 1.4 : 0.8,
-  dur: 2.2 + (i % 5) * 0.6,
-  del: (i * 0.29) % 4,
-  gold: i % 6 === 0,
-}));
-
-const SPARKS = Array.from({ length: 10 }, (_, i) => ({
-  id: i,
-  x: (i * 43.3 + 8) % 100,
-  size: 1.2 + (i % 3) * 0.9,
-  dur: 4 + (i % 4) * 0.8,
-  del: (i * 0.6) % 5,
-  dx: ((i % 6) - 2.5) * 18,
+  x: (i * 43.7 + 6) % 100,
+  size: 8 + (i % 4) * 4,
+  dur: 9 + (i % 6) * 2,
+  del: (i * 1.1) % 10,
+  dx: ((i % 7) - 3) * 20,
+  opacity: 0.10 + (i % 3) * 0.05,   // very faint — matches reference
+  color: i % 3 === 0 ? '#f9a8c4' : i % 3 === 1 ? '#fda4af' : '#fbcfe8',
 }));
 
 const BURST = Array.from({ length: 28 }, (_, i) => ({
@@ -29,120 +22,34 @@ const BURST = Array.from({ length: 28 }, (_, i) => ({
 
 const EASE = [0.16, 1, 0.3, 1];
 
-function LandingBackdrop() {
+/* ── Minimal heart SVG ── */
+function HeartIcon({ size, color, opacity }) {
   return (
-    <>
-      <motion.div
-        className="landing-page__pattern islamic-pattern"
-        animate={{ opacity: [0.04, 0.08, 0.04] }}
-        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <div className="landing-page__glow" />
-      <div className="landing-page__vignette" />
-      <div className="landing-page__frame landing-page__frame--top" />
-      <motion.div
-        className="landing-page__frame landing-page__frame--bottom"
-        animate={{ opacity: [0.35, 0.85, 0.35] }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-      />
-    </>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={color} style={{ opacity }}>
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+    </svg>
   );
 }
 
-function LandingAmbient() {
+/* ── Floating hearts ambient ── */
+function FloatingHearts() {
   return (
     <>
-      {STARS.map((star) => (
+      {HEARTS.map((h) => (
         <motion.div
-          key={star.id}
-          className="landing-page__star"
-          style={{
-            left: `${star.x}%`,
-            top: `${star.y}%`,
-            width: star.size,
-            height: star.size,
-            background: star.gold ? 'rgba(245,217,120,0.9)' : 'rgba(255,255,240,0.7)',
-          }}
-          animate={{ opacity: [0.1, 0.75, 0.1], scale: [0.7, 1.15, 0.7] }}
-          transition={{ duration: star.dur, delay: star.del, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
-      {SPARKS.map((spark) => (
-        <motion.div
-          key={spark.id}
-          className="landing-page__particle"
-          style={{
-            left: `${spark.x}%`,
-            bottom: -4,
-            width: spark.size,
-            height: spark.size,
-          }}
-          animate={{
-            y: [0, -180, -230],
-            x: [0, spark.dx, spark.dx * 1.5],
-            opacity: [0, 0.75, 0],
-            scale: [1, 0.55, 0.1],
-          }}
-          transition={{ duration: spark.dur, delay: spark.del, repeat: Infinity, ease: 'easeOut' }}
-        />
+          key={h.id}
+          style={{ position: 'absolute', left: `${h.x}%`, bottom: -20, pointerEvents: 'none' }}
+          animate={{ y: [0, -900], x: [0, h.dx], rotate: [0, 12, -8, 15] }}
+          transition={{ duration: h.dur, delay: h.del, repeat: Infinity, ease: 'easeOut' }}
+        >
+          <HeartIcon size={h.size} color={h.color} opacity={h.opacity} />
+        </motion.div>
       ))}
     </>
   );
 }
 
-function InviteIntro({ guestName, ready }) {
-  const reveal = (delay = 0) => ({
-    initial: { opacity: 0, y: 16 },
-    animate: ready ? { opacity: 1, y: 0 } : {},
-    transition: { duration: 0.8, delay, ease: EASE },
-  });
-
-  return (
-    <motion.div className="landing-intro landing-panel__intro">
-      <motion.p {...reveal(0.08)} className="landing-intro__bismillah">
-        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
-      </motion.p>
-
-      <motion.div {...reveal(0.14)} className="landing-intro__divider">
-        <span aria-hidden="true">✦</span>
-      </motion.div>
-
-      {guestName ? (
-        <>
-          <motion.p {...reveal(0.2)} className="landing-intro__eyebrow">
-            A Special Invitation For You
-          </motion.p>
-          <motion.div {...reveal(0.28)} className="landing-intro__guest">
-            <span className="landing-intro__guest-label">Welcome</span>
-            <span className="landing-intro__guest-name">{guestName}</span>
-            <span className="landing-intro__guest-label">to our Nikah</span>
-          </motion.div>
-          <motion.p {...reveal(0.36)} className="landing-intro__note">
-            Your presence would fill our hearts with joy on this blessed occasion.
-          </motion.p>
-        </>
-      ) : (
-        <>
-          <motion.p {...reveal(0.2)} className="landing-intro__eyebrow">
-            Together with their families
-          </motion.p>
-          <motion.p {...reveal(0.28)} className="landing-intro__couple">
-            Md Suleman <span>&amp;</span> Sofiya Fatima
-          </motion.p>
-          <motion.p {...reveal(0.36)} className="landing-intro__note">
-            We invite you to share in the joy of this sacred Nikah.
-          </motion.p>
-        </>
-      )}
-
-      <motion.div {...reveal(0.44)} className="landing-intro__meta">
-        <span>11 June 2026</span>
-        <span>Rampur Saghri, Muzaffarpur</span>
-      </motion.div>
-    </motion.div>
-  );
-}
-
+/* ── Pink envelope (exactly matching reference) ── */
 function WeddingEnvelope({ onOpen, graphicId }) {
   const [phase, setPhase] = useState('idle');
 
@@ -150,152 +57,131 @@ function WeddingEnvelope({ onOpen, graphicId }) {
     if (phase !== 'idle') return;
     setPhase('burst');
     window.setTimeout(() => setPhase('open'), 650);
-    window.setTimeout(() => {
-      setPhase('done');
-      onOpen();
-    }, 2100);
+    window.setTimeout(() => { setPhase('done'); onOpen(); }, 2100);
   };
 
   return (
-    <motion.div
-      className="landing-envelope landing-panel__envelope"
-      initial={{ opacity: 0, y: 28, scale: 0.92 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 1, delay: 0.35, ease: EASE }}
-    >
+    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+      {/* Glow halo */}
       <motion.div
-        className="landing-envelope__halo"
-        animate={
-          phase === 'idle'
-            ? { opacity: [0.45, 0.9, 0.45], scale: [0.96, 1.04, 0.96] }
-            : { opacity: 1, scale: 1.08 }
-        }
-        transition={{ duration: 3.2, repeat: phase === 'idle' ? Infinity : 0, ease: 'easeInOut' }}
+        style={{
+          position: 'absolute', inset: '10% 12% 18%', borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(249,168,196,0.28) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+        animate={{ scale: [0.96, 1.04, 0.96], opacity: [0.5, 1, 0.5] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      <motion.div
-        className="landing-envelope__pulse"
-        animate={{ scale: [1, 1.16, 1], opacity: [0.35, 0, 0.35] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeOut' }}
-      />
-
+      {/* Envelope button */}
       <motion.button
-        type="button"
-        onClick={open}
-        disabled={phase !== 'idle'}
+        type="button" onClick={open} disabled={phase !== 'idle'}
         aria-label="Open wedding invitation envelope"
-        className="landing-envelope__trigger"
-        animate={
-          phase === 'idle'
-            ? { y: [0, -10, 0] }
-            : phase === 'burst'
-              ? { y: -14, scale: 1.03 }
-              : {}
-        }
-        transition={
-          phase === 'idle'
-            ? { duration: 3.6, repeat: Infinity, ease: 'easeInOut' }
-            : { duration: 0.45, ease: 'easeOut' }
-        }
+        style={{ position: 'relative', zIndex: 2, width: '100%', padding: 0, border: 'none', background: 'transparent', cursor: phase === 'idle' ? 'pointer' : 'default', outline: 'none' }}
+        animate={phase === 'idle' ? { y: [0, -8, 0] } : phase === 'burst' ? { y: -14, scale: 1.03 } : {}}
+        transition={phase === 'idle' ? { duration: 3.8, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.45, ease: 'easeOut' }}
       >
-        <svg viewBox="0 0 520 340" fill="none" xmlns="http://www.w3.org/2000/svg" className="landing-envelope__svg">
+        <svg viewBox="0 0 520 340" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style={{ width: '100%', height: 'auto', display: 'block', filter: 'drop-shadow(0 10px 28px rgba(244,114,182,0.28))' }}
+        >
           <defs>
+            {/* Envelope body — light blush matching reference */}
             <linearGradient id={`${graphicId}-envBg`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#122A1A" />
-              <stop offset="50%" stopColor="#0D2016" />
-              <stop offset="100%" stopColor="#081410" />
+              <stop offset="0%" stopColor="#fce7f3" />
+              <stop offset="55%" stopColor="#fbcfe8" />
+              <stop offset="100%" stopColor="#f9a8c4" />
             </linearGradient>
-            <linearGradient id={`${graphicId}-flapBg`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1A3D26" />
-              <stop offset="100%" stopColor="#0F2318" />
+            {/* Flap — deeper pink */}
+            <linearGradient id={`${graphicId}-flapTop`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#f472b6" />
+              <stop offset="100%" stopColor="#ec4899" />
             </linearGradient>
+            {/* Side flaps */}
             <linearGradient id={`${graphicId}-flapL`} x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#0A1C12" />
-              <stop offset="100%" stopColor="#0E2318" />
+              <stop offset="0%" stopColor="#fda4af" />
+              <stop offset="100%" stopColor="#fbcfe8" />
             </linearGradient>
             <linearGradient id={`${graphicId}-flapR`} x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#0E2318" />
-              <stop offset="100%" stopColor="#0A1C12" />
+              <stop offset="0%" stopColor="#fbcfe8" />
+              <stop offset="100%" stopColor="#fda4af" />
             </linearGradient>
+            {/* Bottom flap */}
             <linearGradient id={`${graphicId}-flapBot`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#12281A" />
-              <stop offset="100%" stopColor="#081410" />
+              <stop offset="0%" stopColor="#fbcfe8" />
+              <stop offset="100%" stopColor="#f9a8c4" />
             </linearGradient>
-            <linearGradient id={`${graphicId}-goldStroke`} x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#F5D978" stopOpacity="0.75" />
-              <stop offset="45%" stopColor="#C9A84C" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="#8A6030" stopOpacity="0.6" />
-            </linearGradient>
-            <radialGradient id={`${graphicId}-waxSeal`} cx="50%" cy="35%">
-              <stop offset="0%" stopColor="#C42828" />
-              <stop offset="60%" stopColor="#8B1515" />
-              <stop offset="100%" stopColor="#4A0808" />
+            {/* Wax seal */}
+            <radialGradient id={`${graphicId}-wax`} cx="50%" cy="35%">
+              <stop offset="0%" stopColor="#e11d48" />
+              <stop offset="60%" stopColor="#be123c" />
+              <stop offset="100%" stopColor="#881337" />
             </radialGradient>
-            <filter id={`${graphicId}-sealGlow`} x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur in="SourceAlpha" stdDeviation="5" result="blur" />
-              <feFlood floodColor="#C9A84C" floodOpacity="0.35" result="c" />
-              <feComposite in="c" in2="blur" operator="in" result="d" />
-              <feMerge>
-                <feMergeNode in="d" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-            <filter id={`${graphicId}-envShadow`} x="-5%" y="-5%" width="110%" height="120%">
-              <feDropShadow dx="0" dy="12" stdDeviation="18" floodColor="#000" floodOpacity="0.6" />
+            <filter id={`${graphicId}-shadow`} x="-5%" y="-5%" width="112%" height="124%">
+              <feDropShadow dx="0" dy="10" stdDeviation="14" floodColor="rgba(244,114,182,0.28)" />
             </filter>
           </defs>
 
-          <rect x="2" y="38" width="516" height="296" rx="10" fill={`url(#${graphicId}-envBg)`} filter={`url(#${graphicId}-envShadow)`} />
-          <rect x="2" y="38" width="516" height="296" rx="10" stroke={`url(#${graphicId}-goldStroke)`} strokeWidth="1.8" />
-          <rect x="12" y="48" width="496" height="276" rx="7" stroke="rgba(201,168,76,0.25)" strokeWidth="0.8" fill="none" />
+          {/* Envelope body */}
+          <rect x="2" y="38" width="516" height="296" rx="14" fill={`url(#${graphicId}-envBg)`} filter={`url(#${graphicId}-shadow)`} />
+          <rect x="2" y="38" width="516" height="296" rx="14" stroke="rgba(244,114,182,0.35)" strokeWidth="1.5" fill="none" />
 
-          <path d="M2 38 L260 198 L2 334 Z" fill={`url(#${graphicId}-flapL)`} />
-          <path d="M518 38 L260 198 L518 334 Z" fill={`url(#${graphicId}-flapR)`} />
-          <path d="M2 334 L260 198 L518 334 Z" fill={`url(#${graphicId}-flapBot)`} stroke={`url(#${graphicId}-goldStroke)`} strokeWidth="0.9" />
+          {/* Side flaps */}
+          <path d="M2 38 L260 200 L2 334 Z" fill={`url(#${graphicId}-flapL)`} />
+          <path d="M518 38 L260 200 L518 334 Z" fill={`url(#${graphicId}-flapR)`} />
 
+          {/* Bottom flap */}
+          <path d="M2 334 L260 200 L518 334 Z" fill={`url(#${graphicId}-flapBot)`} stroke="rgba(244,114,182,0.25)" strokeWidth="0.8" />
+
+          {/* Top flap (opens on click) */}
           <motion.path
-            d="M2 38 L260 198 L518 38 Z"
-            fill={`url(#${graphicId}-flapBg)`}
-            stroke={`url(#${graphicId}-goldStroke)`}
-            strokeWidth="1.1"
+            d="M2 38 L260 200 L518 38 Z"
+            fill={`url(#${graphicId}-flapTop)`}
+            stroke="rgba(244,114,182,0.45)" strokeWidth="1"
             style={{ transformOrigin: '260px 38px' }}
             animate={phase === 'open' || phase === 'done' ? { scaleY: -1 } : { scaleY: 1 }}
-            transition={{ duration: 0.85, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
           />
 
-          <circle cx="260" cy="198" r="52" fill="none" stroke="rgba(201,168,76,0.15)" strokeWidth="1" />
-          <circle cx="260" cy="198" r="46" fill={`url(#${graphicId}-waxSeal)`} filter={`url(#${graphicId}-sealGlow)`} />
-          <circle cx="260" cy="198" r="41" fill="none" stroke="rgba(232,201,126,0.55)" strokeWidth="1.4" />
-          <text x="260" y="192" textAnchor="middle" fontSize="11" fontFamily="'Great Vibes',cursive" fill="rgba(248,243,232,0.65)">
-            Nikah
-          </text>
-          <text x="260" y="210" textAnchor="middle" fontSize="17" fontFamily="'Great Vibes',cursive" fill="rgba(248,243,232,0.95)" letterSpacing="3">
-            S&amp;S
-          </text>
+          {/* Wax seal */}
+          <circle cx="260" cy="200" r="48" fill={`url(#${graphicId}-wax)`} />
+          <circle cx="260" cy="200" r="43" fill="none" stroke="rgba(255,200,220,0.55)" strokeWidth="1.5" />
+          <text x="260" y="194" textAnchor="middle" fontSize="10" fontFamily="'Great Vibes', cursive" fill="rgba(255,240,245,0.72)">Nikah</text>
+          <text x="260" y="213" textAnchor="middle" fontSize="18" fontFamily="'Great Vibes', cursive" fill="rgba(255,240,245,0.96)" letterSpacing="3">S&amp;S</text>
 
-          <text x="260" y="290" textAnchor="middle" fontSize="8.5" fontFamily="'Inter',sans-serif" fill="rgba(201,168,76,0.62)" letterSpacing="5">
-            TAP TO OPEN
-          </text>
-          <line x1="195" y1="298" x2="325" y2="298" stroke="rgba(201,168,76,0.22)" strokeWidth="0.7" />
+          {/* "CLICK TO OPEN" label */}
+          <text x="260" y="294" textAnchor="middle" fontSize="8" fontFamily="'DM Sans', sans-serif" fill="rgba(190,18,60,0.5)" letterSpacing="5">CLICK TO OPEN</text>
+          <line x1="200" y1="301" x2="320" y2="301" stroke="rgba(244,114,182,0.2)" strokeWidth="0.6" />
         </svg>
 
+        {/* Peek animation when opening */}
         <AnimatePresence>
           {(phase === 'open' || phase === 'done') && (
             <motion.div
-              initial={{ y: 28, opacity: 0, scaleX: 0.92 }}
-              animate={{ y: -54, opacity: 1, scaleX: 1 }}
+              initial={{ y: 28, opacity: 0, scaleX: 0.9 }}
+              animate={{ y: -50, opacity: 1, scaleX: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.7, delay: 0.32, ease: EASE }}
-              className="landing-envelope__peek"
+              transition={{ duration: 0.7, delay: 0.3, ease: EASE }}
+              style={{
+                position: 'absolute', left: '1.25rem', right: '1.25rem', bottom: '2rem',
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                padding: '0.9rem 1rem', borderRadius: '0.9rem',
+                background: 'linear-gradient(135deg, rgba(255,242,250,0.99), rgba(252,231,243,0.99))',
+                border: '1px solid rgba(244,114,182,0.38)',
+                boxShadow: '0 -8px 32px rgba(244,114,182,0.12)',
+              }}
             >
-              <p className="landing-envelope__peek-label">Opening your invitation</p>
-              <p className="landing-envelope__peek-names">Md Suleman &amp; Sofiya Fatima</p>
-              <div className="landing-envelope__peek-dots" aria-hidden="true">
-                {[0, 1, 2].map((dot) => (
-                  <motion.span
-                    key={dot}
-                    animate={{ opacity: [0.25, 1, 0.25], scale: [0.85, 1.15, 0.85] }}
-                    transition={{ duration: 0.9, delay: dot * 0.18, repeat: Infinity }}
+              <p style={{ margin: 0, fontFamily: "'DM Sans', sans-serif", fontSize: '0.48rem', letterSpacing: '0.32em', textTransform: 'uppercase', color: 'rgba(190,18,60,0.5)' }}>
+                Opening your invitation
+              </p>
+              <p style={{ marginTop: '0.3rem', fontFamily: "'Great Vibes', cursive", fontSize: 'clamp(1.1rem, 3vw, 1.5rem)', color: '#be123c', margin: '0.3rem 0 0' }}>
+                Md Suleman & Sofiya Fatima
+              </p>
+              <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem' }}>
+                {[0, 1, 2].map((d) => (
+                  <motion.span key={d}
+                    style={{ width: '0.32rem', height: '0.32rem', borderRadius: '50%', background: '#f472b6', display: 'block' }}
+                    animate={{ opacity: [0.2, 1, 0.2], scale: [0.8, 1.2, 0.8] }}
+                    transition={{ duration: 0.85, delay: d * 0.18, repeat: Infinity }}
                   />
                 ))}
               </div>
@@ -304,80 +190,290 @@ function WeddingEnvelope({ onOpen, graphicId }) {
         </AnimatePresence>
       </motion.button>
 
+      {/* Burst particles */}
       <AnimatePresence>
-        {phase === 'burst' &&
-          BURST.map((particle) => (
-            <motion.span
-              key={particle.id}
-              className="landing-envelope__burst"
-              style={{
-                width: particle.big ? 8 : 4,
-                height: particle.big ? 8 : 4,
-                background: particle.id % 3 === 0 ? '#F5D978' : particle.id % 3 === 1 ? '#C9A84C' : '#fff',
-              }}
-              initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-              animate={{
-                x: Math.cos(particle.angle) * particle.r,
-                y: Math.sin(particle.angle) * particle.r,
-                opacity: 0,
-                scale: 0.1,
-              }}
-              transition={{ duration: 0.95 + (particle.id % 4) * 0.15, ease: 'easeOut' }}
-            />
-          ))}
+        {phase === 'burst' && BURST.map((p) => (
+          <motion.span key={p.id}
+            style={{
+              position: 'absolute', left: '50%', top: '55%', zIndex: 3,
+              width: p.big ? 8 : 4, height: p.big ? 8 : 4, borderRadius: '50%',
+              background: p.id % 3 === 0 ? '#f472b6' : p.id % 3 === 1 ? '#fb7185' : '#fda4af',
+              boxShadow: '0 0 6px rgba(244,114,182,0.7)', pointerEvents: 'none',
+            }}
+            initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+            animate={{ x: Math.cos(p.angle) * p.r, y: Math.sin(p.angle) * p.r, opacity: 0, scale: 0.1 }}
+            transition={{ duration: 0.9 + (p.id % 4) * 0.14, ease: 'easeOut' }}
+          />
+        ))}
       </AnimatePresence>
-
-      <motion.p
-        className="landing-envelope__hint"
-        animate={{ opacity: [0.55, 1, 0.55] }}
-        transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
-      >
-        Tap the envelope seal to open your wedding card
-      </motion.p>
-
-      <button type="button" className="landing-envelope__cta btn-outline-gold" onClick={open} disabled={phase !== 'idle'}>
-        Open Invitation
-      </button>
-    </motion.div>
+    </div>
   );
 }
 
+/* ══════════════════════════════════════════
+   MAIN LANDING PAGE
+   Matches reference: near-white background,
+   clean centred layout, subtle floating hearts
+══════════════════════════════════════════ */
 export default function LandingPage({ guestName, onEnter }) {
   const [ready, setReady] = useState(false);
   const graphicId = useId().replace(/:/g, '');
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setReady(true), 120);
-    return () => window.clearTimeout(timer);
+    const t = window.setTimeout(() => setReady(true), 100);
+    return () => window.clearTimeout(t);
   }, []);
+
+  const reveal = (delay = 0) => ({
+    initial: { opacity: 0, y: 16 },
+    animate: ready ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 0.7, delay, ease: EASE },
+  });
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.05 }}
-      transition={{ duration: 0.95, ease: [0.7, 0, 0.3, 1] }}
-      className="landing-page"
+      exit={{ opacity: 0, scale: 1.03 }}
+      transition={{ duration: 0.85, ease: [0.7, 0, 0.3, 1] }}
+      style={{
+        /* ── Background exactly like reference: very pale blush-to-white ── */
+        position: 'fixed', inset: 0, zIndex: 9999,
+        overflowX: 'hidden', overflowY: 'auto', WebkitOverflowScrolling: 'touch',
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        minHeight: '100dvh',
+        background: 'radial-gradient(ellipse at 60% 30%, #fce7f3 0%, #fdf4f8 28%, #fff8fc 52%, #fdf4f8 75%, #fce7f3 100%)',
+        paddingTop: 'max(2rem, env(safe-area-inset-top))',
+        paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))',
+        paddingLeft: 'max(1rem, env(safe-area-inset-left))',
+        paddingRight: 'max(1rem, env(safe-area-inset-right))',
+      }}
     >
-      <LandingBackdrop />
-      <LandingAmbient />
+      {/* Floating hearts — very subtle */}
+      <FloatingHearts />
 
+      {/* Very light central glow */}
+      <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'radial-gradient(ellipse at 50% 35%, rgba(249,168,196,0.14) 0%, transparent 60%)' }} />
+
+      {/* Thin decorative top/bottom lines */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(to right, transparent, rgba(244,114,182,0.45) 20%, rgba(251,207,232,0.7) 50%, rgba(244,114,182,0.45) 80%, transparent)', opacity: 0.6 }} />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '2px', background: 'linear-gradient(to right, transparent, rgba(244,114,182,0.45) 20%, rgba(251,207,232,0.7) 50%, rgba(244,114,182,0.45) 80%, transparent)', opacity: 0.6 }} />
+
+      {/* ── Content container ── */}
       <motion.div
-        className="landing-page__stage"
-        initial={{ opacity: 0, y: 24 }}
+        style={{
+          position: 'relative', zIndex: 10,
+          width: '100%', maxWidth: '36rem',
+          display: 'flex', flexDirection: 'column', alignItems: 'center',
+          textAlign: 'center',
+        }}
+        initial={{ opacity: 0, y: 20 }}
         animate={ready ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.9, ease: EASE }}
+        transition={{ duration: 0.85, ease: EASE }}
       >
-        <div className="landing-panel">
-          <span className="landing-panel__corner landing-panel__corner--tl" aria-hidden="true" />
-          <span className="landing-panel__corner landing-panel__corner--tr" aria-hidden="true" />
-          <span className="landing-panel__corner landing-panel__corner--bl" aria-hidden="true" />
-          <span className="landing-panel__corner landing-panel__corner--br" aria-hidden="true" />
 
-          <div className="landing-panel__grid">
-            <InviteIntro guestName={guestName} ready={ready} />
-            <WeddingEnvelope onOpen={onEnter} graphicId={graphicId} />
-          </div>
-        </div>
+        {/* ── Bismillah ── */}
+        <motion.div {...reveal(0.05)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem', marginBottom: '0.6rem' }}>
+          {/* Crescent ornament */}
+          <motion.div
+            style={{ color: '#f9a8c4', fontSize: '0.9rem', letterSpacing: '0.65rem', opacity: 0.85 }}
+            animate={{ opacity: [0.6, 0.95, 0.6] }}
+            transition={{ duration: 2.8, repeat: Infinity }}
+          >
+            ☽ ✦ ☽
+          </motion.div>
+
+          <p style={{
+            margin: 0,
+            fontFamily: "'Amiri', serif",
+            fontSize: 'clamp(1.25rem, 5.5vw, 1.85rem)',
+            color: '#9d174d',
+            textShadow: '0 2px 16px rgba(190,18,60,0.15)',
+            lineHeight: 1.4,
+            direction: 'rtl',
+          }}>
+            بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
+          </p>
+
+          <div style={{ width: 'min(13rem, 58vw)', height: '1px', background: 'linear-gradient(to right, transparent, rgba(244,114,182,0.45), transparent)' }} />
+        </motion.div>
+
+        {/* ── "Welcome to Our Wedding" — matches reference heading exactly ── */}
+        <motion.h1 {...reveal(0.13)} style={{
+          margin: '0 0 0.5rem',
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 'clamp(1.8rem, 7.5vw, 2.8rem)',
+          fontWeight: 700,
+          color: '#111111',
+          lineHeight: 1.1,
+          letterSpacing: '-0.015em',
+        }}>
+          Welcome to Our Wedding
+        </motion.h1>
+
+        {/* ── Guest name or "Dear Guest" ── */}
+        {guestName ? (
+          /* ── NAMED GUEST: beautiful highlighted card ── */
+          <motion.div
+            {...reveal(0.21)}
+            style={{
+              marginBottom: '0.6rem',
+              width: 'min(100%, 22rem)',
+              position: 'relative',
+              borderRadius: '1.15rem',
+              /* frosted glass with pink tint */
+              background: 'linear-gradient(145deg, rgba(255,255,255,0.82) 0%, rgba(252,231,243,0.72) 100%)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1.5px solid rgba(244,114,182,0.32)',
+              boxShadow: '0 8px 32px rgba(244,114,182,0.14), inset 0 1px 0 rgba(255,255,255,0.75)',
+              padding: '0.9rem 1.4rem 1rem',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.18rem',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Top pink accent bar */}
+            <div style={{
+              position: 'absolute', top: 0, left: '15%', right: '15%', height: '2.5px',
+              background: 'linear-gradient(to right, transparent, #f472b6, #fbcfe8, #f472b6, transparent)',
+              borderRadius: '0 0 4px 4px',
+            }} />
+
+            {/* Corner hearts */}
+            <span style={{ position: 'absolute', top: '0.55rem', left: '0.7rem', fontSize: '0.7rem', opacity: 0.4 }}>🤍</span>
+            <span style={{ position: 'absolute', top: '0.55rem', right: '0.7rem', fontSize: '0.7rem', opacity: 0.4 }}>🤍</span>
+
+            {/* Label */}
+            <p style={{
+              margin: 0,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 'clamp(0.55rem, 1.6vw, 0.63rem)',
+              letterSpacing: '0.26em',
+              textTransform: 'uppercase',
+              color: 'rgba(190,18,60,0.55)',
+              fontWeight: 500,
+            }}>
+              A Special Invitation For
+            </p>
+
+            {/* Guest name — big, bold, script */}
+            <motion.p
+              animate={{ textShadow: ['0 0 12px rgba(190,18,60,0.15)', '0 0 24px rgba(190,18,60,0.3)', '0 0 12px rgba(190,18,60,0.15)'] }}
+              transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                margin: 0,
+                fontFamily: "'Great Vibes', cursive",
+                fontSize: 'clamp(1.85rem, 8vw, 2.75rem)',
+                lineHeight: 1.1,
+                color: '#be123c',
+                letterSpacing: '0.01em',
+              }}
+            >
+              {guestName}
+            </motion.p>
+
+            {/* Thin divider */}
+            <div style={{ width: '60%', height: '1px', background: 'linear-gradient(to right, transparent, rgba(244,114,182,0.4), transparent)', margin: '0.1rem 0' }} />
+
+            {/* Invitation line */}
+            <p style={{
+              margin: 0,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 'clamp(0.72rem, 2.2vw, 0.82rem)',
+              color: '#6b4455',
+              fontWeight: 400,
+            }}>
+              You are warmly invited to our wedding
+            </p>
+          </motion.div>
+        ) : (
+          /* No guest: simple "Dear Guest" exactly like reference */
+          <motion.div {...reveal(0.21)} style={{ marginBottom: '0.55rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.05rem' }}>
+            <p style={{
+              margin: 0,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 'clamp(0.8rem, 2.5vw, 0.95rem)',
+              color: '#555',
+            }}>
+              Dear{' '}
+              <strong style={{
+                fontFamily: "'Cormorant Garamond', serif",
+                fontWeight: 700,
+                fontSize: '1.25em',
+                color: '#e11d48',
+              }}>
+                Guest
+              </strong>
+            </p>
+            <p style={{
+              margin: 0,
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 'clamp(0.78rem, 2.3vw, 0.9rem)',
+              color: '#555',
+            }}>
+              You are invited to our wedding
+            </p>
+          </motion.div>
+        )}
+
+        {/* ── Envelope — centred, prominent, matching reference ── */}
+        <motion.div {...reveal(0.28)} style={{ width: 'min(100%, 24rem)', marginTop: '0.2rem' }}>
+          <WeddingEnvelope onOpen={onEnter} graphicId={graphicId} />
+        </motion.div>
+
+        {/* ── "Click the invitation to open" ── */}
+        <motion.p
+          {...reveal(0.42)}
+          animate={ready ? { opacity: [0.52, 0.9, 0.52] } : {}}
+          transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+          style={{
+            margin: '0.15rem 0 0',
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 'clamp(0.6rem, 1.8vw, 0.7rem)',
+            color: '#9d174d',
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            opacity: 0.72,
+          }}
+        >
+          Click the invitation to open
+        </motion.p>
+
+        {/* ── Bouncing finger ── */}
+        <motion.div
+          initial={{ opacity: 0 }} animate={ready ? { opacity: 1 } : {}}
+          transition={{ duration: 0.5, delay: 0.55 }}
+          style={{ fontSize: '1.55rem', marginTop: '0.2rem' }}
+        >
+          <motion.span
+            animate={ready ? { y: [0, 6, 0] } : {}}
+            transition={{ duration: 1.35, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ display: 'block' }}
+          >
+            👆
+          </motion.span>
+        </motion.div>
+
+        {/* ── Date / venue pills ── */}
+        <motion.div {...reveal(0.58)} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.4rem', marginTop: '0.65rem' }}>
+          {['11 June 2026', 'Rampur Saghari, Muzaffarpur'].map((txt) => (
+            <span key={txt} style={{
+              padding: '0.3rem 0.85rem', borderRadius: '999px',
+              border: '1px solid rgba(244,114,182,0.3)',
+              background: 'rgba(249,168,196,0.1)',
+              fontFamily: "'DM Sans', sans-serif",
+              fontSize: 'clamp(0.56rem, 1.7vw, 0.66rem)',
+              letterSpacing: '0.1em',
+              color: '#9d174d',
+              textTransform: 'uppercase',
+            }}>
+              {txt}
+            </span>
+          ))}
+        </motion.div>
+
       </motion.div>
     </motion.div>
   );

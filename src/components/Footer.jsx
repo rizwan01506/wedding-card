@@ -72,7 +72,7 @@ export default function Footer({ darkMode }) {
           className="font-inter text-xs text-center tracking-[0.28em] uppercase mb-8"
           style={{ color: 'rgba(201,168,76,0.45)' }}
         >
-          11 June 2026 · Rampur Saghri, Muzaffarpur, Bihar
+          11 June 2026 · Rampur Saghari, Muzaffarpur, Bihar
         </motion.p>
 
         <motion.div
@@ -117,7 +117,7 @@ export default function Footer({ darkMode }) {
           style={{ color: 'rgba(232,224,208,0.5)' }}
         >
           <FiMapPin size={13} style={{ color: '#C9A84C', flexShrink: 0 }} />
-          Village Rampur Saghri, Via: Aurai, Dist: Muzaffarpur, Bihar 843312
+          Village Rampur Saghari, Via: Aurai, Dist: Muzaffarpur, Bihar 843312
         </motion.div>
 
         {/* Bottom */}

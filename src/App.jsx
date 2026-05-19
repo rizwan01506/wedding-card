@@ -125,7 +125,7 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
-              <main className="site-main">
+            <main className="site-main site-main-with-bottomnav">
                 <Hero darkMode={darkMode} guestName={guestName} />
                 <Couple darkMode={darkMode} />
                 <EventDetails darkMode={darkMode} />
@@ -136,7 +136,6 @@ export default function App() {
             </motion.div>
 
             <AudioPlayer />
-            <FloatingRSVP />
           </motion.div>
         )}
       </AnimatePresence>
