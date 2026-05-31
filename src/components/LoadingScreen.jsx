@@ -135,7 +135,7 @@ export default function LoadingScreen({ isVisible }) {
               style={{ background: 'linear-gradient(to right, transparent, #C9A84C, transparent)' }}
             />
 
-            {/* Couple names — PREMIUM large */}
+            {/* Couple names - PREMIUM large */}
             <motion.div
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1, duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -152,7 +152,7 @@ export default function LoadingScreen({ isVisible }) {
                 color: '#F0D98A',
                 textShadow: '0 3px 24px rgba(201,168,76,0.4), 0 1px 10px rgba(0,0,0,0.7)',
                 lineHeight: 1.1,
-              }}>Sofiya Fatima</p>
+              }}>Sofiya Fatma</p>
             </motion.div>
 
             <motion.p

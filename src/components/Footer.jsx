@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { FiHeart, FiMapPin } from 'react-icons/fi';
+import footerBg from '../assets/footer-bg.png';
 
 export default function Footer({ darkMode }) {
   const ref = useRef(null);
@@ -8,9 +9,18 @@ export default function Footer({ darkMode }) {
 
   return (
     <footer
-      className="relative pt-24 pb-12 overflow-hidden"
-      style={{ background: '#0B1810' }}
+      className="relative pt-14 sm:pt-20 pb-28 overflow-hidden"
     >
+      {/* Background image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${footerBg})`,
+          filter: 'brightness(0.2) saturate(1.2)',
+          opacity: 0.55,
+        }} />
+
+      <div className="absolute inset-0" style={{ background: 'rgba(11,24,16,0.82)' }} />
+
       {/* Islamic pattern */}
       <div className="absolute inset-0 islamic-pattern opacity-[0.12]" />
 
@@ -37,10 +47,16 @@ export default function Footer({ darkMode }) {
         >
           <div className="relative">
             <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{ border: '1px dashed rgba(201,168,76,0.2)' }}
+              className="absolute rounded-full pointer-events-none"
+              style={{ inset: -8, border: '1px dashed rgba(201,168,76,0.2)' }}
               animate={{ rotate: 360 }}
               transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+            />
+            <motion.div
+              className="absolute rounded-full pointer-events-none"
+              style={{ inset: -18, border: '1px dashed rgba(201,168,76,0.1)' }}
+              animate={{ rotate: -360 }}
+              transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
             />
             <div className="w-16 h-16 rounded-full flex items-center justify-center"
               style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)' }}>
@@ -62,7 +78,7 @@ export default function Footer({ darkMode }) {
             lineHeight: 1.15,
           }}
         >
-          Md Suleman & Sofiya Fatima
+          Md Suleman & Sofiya Fatma
         </motion.p>
 
         <motion.p
@@ -92,11 +108,11 @@ export default function Footer({ darkMode }) {
           <p className="font-amiri text-2xl sm:text-3xl mb-4 leading-relaxed" style={{ color: '#C9A84C' }}>
             بَارَكَ اللَّهُ لَكَ وَبَارَكَ عَلَيْكَ وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ
           </p>
-          <p className="font-playfair italic text-sm leading-relaxed" style={{ color: 'rgba(232,224,208,0.5)' }}>
+          <p className="font-playfair italic text-sm leading-relaxed" style={{ color: 'rgba(232,224,208,0.78)' }}>
             "May Allah bless you, and shower His blessings upon you,<br className="hidden sm:block" />
             and may He unite you both in goodness."
           </p>
-          <p className="font-inter text-xs mt-2" style={{ color: 'rgba(201,168,76,0.35)' }}>
+          <p className="font-inter text-xs mt-2" style={{ color: 'rgba(201,168,76,0.65)' }}>
             — Du'a for the Newlyweds (Abu Dawud)
           </p>
         </motion.div>
@@ -128,7 +144,7 @@ export default function Footer({ darkMode }) {
           className="font-inter text-xs flex items-center justify-center gap-1.5 text-center"
           style={{ color: 'rgba(201,168,76,0.28)' }}
         >
-          Made with <FiHeart size={11} style={{ color: '#C9A84C' }} /> for Md Suleman & Sofiya Fatima's Special Day
+          Made with <FiHeart size={11} style={{ color: '#C9A84C' }} /> for Md Suleman & Sofiya Fatma's Special Day
         </motion.p>
       </div>
     </footer>

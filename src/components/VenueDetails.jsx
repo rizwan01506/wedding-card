@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { FiMapPin, FiExternalLink, FiNavigation } from 'react-icons/fi';
+import venueBg from '../assets/venue-bg.png';
 import { VIEWPORT, revealTransition } from '../motion/presets';
 
 const VENUES = [
@@ -8,9 +9,9 @@ const VENUES = [
     id: 'haldi-venue',
     event: 'Haldi',
     arabicLabel: 'حفل الهالدي',
-    name: "Bride's Residence — Village Rampur Saghari",
-    address: 'Village Rampur Saghari, Via: Aurai, Dist: Muzaffarpur, Bihar 843312',
-    details: "The Haldi ceremony will be held at the bride's family home on the evening of 10 June 2026 at 10:00 PM. Family and friends are warmly invited.",
+    name: "Groom's Residence",
+    address: 'Vill- Rampur, P.o- Rampur Saghari, P.s- Aurai, Dist- Muzaffarpur, Bihar 843312',
+    details: "The Haldi ceremony will be held at the groom's family home on the evening of 10 June 2026 at 10:00 PM. Family and friends are warmly invited.",
     mapUrl: 'https://maps.google.com/?q=Rampur+Saghari+Muzaffarpur+Bihar+843312',
     color: '#B8860B',
     bgColor: 'rgba(184,134,11,0.07)',
@@ -20,11 +21,11 @@ const VENUES = [
   {
     id: 'baraat-venue',
     event: 'Baraat',
-    arabicLabel: 'مكان البارات',
-    name: "Bride's Residence — Village Rampur Saghari",
-    address: 'Village Rampur Saghari, Via: Aurai, Dist: Muzaffarpur, Bihar 843312',
-    details: "The groom's procession will arrive at the bride's family home after Zuhr Namaaz on 11 June 2026, in a joyful celebration of lights and blessings.",
-    mapUrl: 'https://maps.google.com/?q=Rampur+Saghari+Muzaffarpur+Bihar+843312',
+    arabicLabel: 'مکان بارات',
+    name: "Bride's Residence - Ekdandi",
+    address: 'Vill- Ekdandi, P.o+P.s - Parihar, Dist- Sitamarhi (Bihar) 843324',
+    details: "The groom's procession will arrive at the bride's family home on 11 June 2026 at 11:00 AM, Thursday.",
+    mapUrl: 'https://maps.google.com/?q=Ekdandi+Parihar+Sitamarhi+Bihar',
     color: '#C9A84C',
     bgColor: 'rgba(201,168,76,0.07)',
     borderColor: 'rgba(201,168,76,0.28)',
@@ -33,10 +34,10 @@ const VENUES = [
   {
     id: 'walima-venue',
     event: 'Walima',
-    arabicLabel: 'مكان الوليمة',
-    name: "Groom's Residence — Village Rampur Saghari",
-    address: 'Village Rampur Saghari, Via: Aurai, Dist: Muzaffarpur, Bihar 843312',
-    details: "The Walima feast will be hosted at the groom's family home after Zuhr Namaaz on 12 June 2026. Join us for food, joy, and heartfelt blessings.",
+    arabicLabel: 'مکان ولیمہ',
+    name: "Groom's Residence - At Our Home",
+    address: 'Vill- Rampur, P.o- Rampur Saghari, P.s- Aurai, Dist- Muzaffarpur, Bihar 843312',
+    details: "The Walima feast will be hosted at the groom's family home after Namaz-e-Juma on Friday, 12 June 2026. Join us for food, joy, and heartfelt blessings.",
     mapUrl: 'https://maps.google.com/?q=Rampur+Saghari+Muzaffarpur+Bihar+843312',
     color: '#1B6B47',
     bgColor: 'rgba(27,107,71,0.07)',
@@ -53,7 +54,7 @@ function VenueCard({ venue, index, darkMode }) {
       viewport={VIEWPORT}
       transition={revealTransition(index * 0.08)}
       whileHover={{ y: -6, transition: { duration: 0.35, ease: 'easeOut' } }}
-      className="glass-card group p-7 sm:p-8 relative flex flex-col"
+      className="glass-card group p-5 sm:p-8 relative flex flex-col"
       style={{ borderColor: venue.borderColor }}
     >
       {/* Top accent bar */}
@@ -92,10 +93,10 @@ function VenueCard({ venue, index, darkMode }) {
 
       <div className="flex items-start gap-2 mb-3">
         <FiMapPin size={13} className="mt-0.5 flex-shrink-0" style={{ color: venue.color }} />
-        <p className="font-inter text-sm" style={{ color: 'var(--text-muted)' }}>{venue.address}</p>
+        <p className="font-inter text-sm font-medium" style={{ color: darkMode ? 'rgba(232,220,196,0.88)' : '#333' }}>{venue.address}</p>
       </div>
 
-      <p className="font-inter text-sm leading-relaxed mb-5 flex-1" style={{ color: 'var(--text-muted)' }}>
+      <p className="font-inter text-sm leading-relaxed mb-5 flex-1" style={{ color: darkMode ? 'rgba(232,220,196,0.82)' : '#3A3A3A' }}>
         {venue.details}
       </p>
 
@@ -126,7 +127,18 @@ export default function VenueDetails({ darkMode }) {
   const inView = useInView(ref, { once: true });
 
   return (
-    <section ref={sectionRef} id="venue" className="relative py-28 overflow-hidden site-section">
+    <section ref={sectionRef} id="venue" className="relative py-16 sm:py-28 overflow-hidden site-section">
+      {/* Background image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${venueBg})`,
+          filter: 'brightness(0.15) saturate(1.2)',
+          opacity: darkMode ? 0.45 : 0.3,
+        }} />
+      
+      <div className="absolute inset-0"
+        style={{ background: darkMode ? 'rgba(15,26,20,0.8)' : 'rgba(250,247,240,0.88)' }} />
+
       <motion.div
         className="absolute inset-0 islamic-pattern opacity-[0.05]"
         animate={{ opacity: [0.04, 0.07, 0.04] }}
@@ -139,7 +151,7 @@ export default function VenueDetails({ darkMode }) {
       }} />
 
       <div className="max-w-5xl mx-auto relative z-10 px-4 sm:px-6">
-        <div ref={ref} className="text-center mb-16">
+        <div ref={ref} className="text-center mb-10 sm:mb-16">
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.65 }}
             className="section-tag mb-3">
             Where We Gather

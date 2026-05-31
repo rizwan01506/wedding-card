@@ -8,22 +8,23 @@ import { HiOutlineUserGroup } from 'react-icons/hi';
 
 /* ─── Data ─────────────────────────────────────── */
 const FAMILY = {
-  brothers: ['Md Usman', 'Md Rizwan', 'Md Irfan'],
+  brothers: ['Md. Usman', 'Md. Rizwan', 'Md. Irfan'],
   sisters: ['Razia Fatma'],
-  nephews: ['Ayaan Ahmad', 'Rayyan Ahmad'],
-  address: 'Rampur Saghari, Via Aurai\nDist. Muzaffarpur (Bihar)\nPin — 843312',
+  nephews: ['Ayan Ahmad', 'Rayyan Ahmad'],
+  elders: ['Badre Alam', 'Faiyaz Alam'],
+  address: 'Vill- Rampur, P.o- Rampur Saghari\nP.s- Aurai, Dist- Muzaffarpur\nBihar — 843312',
 };
 
 /* ─── Animated section heading ──────────────────── */
-function SectionHead({ tag, title, verse, verseRef, inView }) {
+function SectionHead({ tag, title, verse, verseRef, inView, darkMode }) {
   return (
-    <div className="text-center mb-14 sm:mb-16">
+    <div className="text-center mb-10 sm:mb-16">
       <motion.p className="section-tag mb-3"
         initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: .6 }}>
         {tag}
       </motion.p>
       <motion.h2 className="font-playfair font-semibold mb-4"
-        style={{ fontSize: 'clamp(2rem,5vw,3rem)' }}
+        style={{ fontSize: 'clamp(2rem,5vw,3rem)', color: darkMode ? '#E8C97E' : '#1A1A1A' }}
         initial={{ opacity: 0, y: 22 }} animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: .75, delay: .08, ease: [.22, 1, .36, 1] }}>
         {title}
@@ -35,9 +36,9 @@ function SectionHead({ tag, title, verse, verseRef, inView }) {
         </motion.p>
       )}
       {verseRef && (
-        <p className="font-inter text-xs mt-1" style={{ color: 'var(--txt-muted)' }}>{verseRef}</p>
+        <p className="font-inter text-xs mt-1" style={{ color: 'var(--text-muted)' }}>{verseRef}</p>
       )}
-      <motion.div className="w-32 gold-line mx-auto mt-5"
+      <motion.div className="w-32 gold-divider mx-auto mt-5"
         initial={{ scaleX: 0 }} animate={inView ? { scaleX: 1 } : {}}
         transition={{ duration: .7, delay: .22 }} />
     </div>
@@ -69,7 +70,7 @@ function Chip({ name, i }) {
 function CatCard({ icon, label, accentColor, children, delay = 0 }) {
   return (
     <motion.div
-      className="glass-card p-5 sm:p-6"
+      className="glass-card p-4 sm:p-6"
       style={{ borderColor: `${accentColor}28` }}
       initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
@@ -95,11 +96,11 @@ export default function GroomFamily({ darkMode }) {
   const inView = useInView(ref, { once: true });
 
   return (
-    <section id="family" className="section-wrap"
+    <section id="family" className="relative py-16 sm:py-28 overflow-hidden site-section"
       style={{ background: darkMode ? 'rgba(16,28,18,.5)' : 'rgba(245,239,224,.55)' }}>
       <div className="absolute inset-0 islamic-pattern opacity-[.04]" />
 
-      <div className="max-w-5xl mx-auto relative">
+      <div className="max-w-5xl mx-auto relative z-10 px-4 sm:px-6">
         <div ref={ref}>
           <SectionHead
             tag="With Love & Pride"
@@ -107,6 +108,7 @@ export default function GroomFamily({ darkMode }) {
             verse='"And We have made you peoples and tribes that you may know one another"'
             verseRef="— Quran 49:13"
             inView={inView}
+            darkMode={darkMode}
           />
         </div>
 
@@ -121,7 +123,7 @@ export default function GroomFamily({ darkMode }) {
           <div className="h-1.5"
             style={{ background: 'linear-gradient(to right, #1B6B47 0%, #C9A84C 50%, #1B6B47 100%)' }} />
 
-          <div className="p-7 sm:p-9 flex flex-col sm:flex-row items-center gap-5">
+          <div className="p-5 sm:p-9 flex flex-col sm:flex-row items-center gap-4 sm:gap-5">
             {/* Moon icon */}
             <div className="w-18 h-18 rounded-full flex-shrink-0 flex items-center justify-center w-20 h-20"
               style={{
@@ -137,8 +139,8 @@ export default function GroomFamily({ darkMode }) {
                 style={{ fontSize: 'clamp(1.9rem,4vw,2.7rem)' }}>
                 Md Suleman
               </h3>
-              <p className="font-cormorant text-lg mt-1" style={{ color: 'var(--txt-muted)', fontStyle: 'italic' }}>
-                Son of Vahidul Rahman
+              <p className="font-cormorant text-lg mt-1" style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                S/o Md. Wahidur Rahman
               </p>
             </div>
           </div>
@@ -155,7 +157,7 @@ export default function GroomFamily({ darkMode }) {
                 style={{ background: 'rgba(201,168,76,.14)', color: 'var(--gold)' }}>
                 <FiUser size={14} />
               </div>
-              <span className="font-playfair text-lg font-semibold">Vahidul Rahman</span>
+              <span className="font-playfair text-lg font-semibold">Md. Wahidur Rahman</span>
             </div>
           </CatCard>
 
@@ -183,7 +185,7 @@ export default function GroomFamily({ darkMode }) {
 
         {/* ── Address ── */}
         <motion.div
-          className="glass-card p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-5"
+          className="glass-card p-4 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5"
           style={{ borderColor: 'rgba(27,107,71,.28)' }}
           initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: .65, delay: .25, ease: [.22, 1, .36, 1] }}

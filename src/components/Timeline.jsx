@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { BsMoonStarsFill, BsStarFill } from 'react-icons/bs';
 import { GiFlowerPot } from 'react-icons/gi';
+import timelineBg from '../assets/timeline-bg.png';
 import { EASE, VIEWPORT, revealTransition } from '../motion/presets';
 
 const STEPS = [
@@ -21,9 +22,9 @@ const STEPS = [
     id: 'baraat',
     step: '02',
     icon: <BsMoonStarsFill size={22} />,
-    title: 'Baraat',
-    subtitle: 'Thu, 11 June · After Zuhr Namaaz',
-    description: "The groom's procession arrives at the bride's residence at Village Rampur Saghari in a joyful celebration of lights and blessings after Zuhr prayers.",
+    title: 'Dep. of Baraat',
+    subtitle: 'Thu, 11 June · 11:00 AM',
+    description: "The groom's procession departs for the bride's residence at Village Ekdandi, Parihar, Sitamarhi in a joyful celebration of lights and blessings.",
     color: '#C9A84C',
     bg: 'rgba(201,168,76,0.09)',
     border: 'rgba(201,168,76,0.28)',
@@ -34,8 +35,8 @@ const STEPS = [
     step: '03',
     icon: <BsStarFill size={22} />,
     title: 'Walima Reception',
-    subtitle: 'Fri, 12 June · After Zuhr Namaaz',
-    description: "The wedding celebrations conclude with the blessed Walima feast. Join us for an afternoon of joy, abundant food, and heartfelt du'as.",
+    subtitle: 'Fri, 12 June · After Namaz-e-Juma',
+    description: "The wedding celebrations conclude with the blessed Walima feast at the Groom's residence. Join us for an afternoon of joy, abundant food, and heartfelt du'as.",
     color: '#1B6B47',
     bg: 'rgba(27,107,71,0.09)',
     border: 'rgba(27,107,71,0.28)',
@@ -75,13 +76,23 @@ export default function Timeline({ darkMode }) {
     <section
       ref={sectionRef}
       id="timeline"
-      className="relative py-28 overflow-hidden site-section"
-      style={{ background: darkMode ? 'rgba(21,32,16,0.5)' : 'rgba(242,232,213,0.45)' }}
+      className="relative py-16 sm:py-28 overflow-hidden site-section"
     >
+      {/* Background image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${timelineBg})`,
+          filter: 'brightness(0.15) saturate(1.1)',
+          opacity: darkMode ? 0.5 : 0.3,
+        }} />
+
+      <div className="absolute inset-0"
+        style={{ background: darkMode ? 'rgba(21,32,16,0.78)' : 'rgba(242,232,213,0.85)' }} />
+
       <div className="absolute inset-0 islamic-pattern opacity-[0.05]" />
 
       <div className="max-w-3xl mx-auto relative z-10 px-4 sm:px-6">
-        <div ref={headRef} className="text-center mb-16">
+        <div ref={headRef} className="text-center mb-10 sm:mb-16">
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.65 }}
             className="section-tag mb-3">
             The Journey
@@ -117,7 +128,7 @@ export default function Timeline({ darkMode }) {
                   <div className={`w-full sm:w-[calc(50%-2rem)] ${isLeft ? 'sm:pr-8' : 'sm:pl-8'}`}>
                     <motion.div
                       whileHover={{ y: -5, transition: { duration: 0.3 } }}
-                      className="glass-card p-6 group relative"
+                      className="glass-card p-4 sm:p-6 group relative"
                       style={{
                         borderColor: step.border,
                         boxShadow: `0 8px 32px rgba(0,0,0,0.06), 0 0 24px ${step.glow}`,
@@ -153,7 +164,7 @@ export default function Timeline({ darkMode }) {
                       <p className="font-inter text-xs font-semibold mb-3 tracking-wide" style={{ color: step.color }}>
                         {step.subtitle}
                       </p>
-                      <p className="font-inter text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
+                      <p className="font-inter text-sm leading-relaxed" style={{ color: darkMode ? 'rgba(232,220,196,0.82)' : '#3A3A3A' }}>
                         {step.description}
                       </p>
 

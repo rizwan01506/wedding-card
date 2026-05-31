@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import groomImg from '../assets/groom.jpg';
-import brideImg from '../assets/bride.jpg';
+import groomImg from '../assets/boy.jpeg';
+import brideImg from '../assets/girl.jpeg';
+import coupleBg from '../assets/couple-bg.png';
 import { VIEWPORT, revealTransition } from '../motion/presets';
 
 /* ─── Spinning ornament ring ─── */
@@ -21,20 +22,20 @@ const OrnamentRing = ({ cw = true, size = 100, opacity = 0.15, dur = 22 }) => (
 );
 
 /* ─── Card ─── */
-function CoupleCard({ image, name, parentLine, title, bio, index, darkMode }) {
+function CoupleCard({ image, name, parentLine, title, bio, index, darkMode, facePosition = 'center 18%' }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={VIEWPORT}
       transition={revealTransition(index * 0.08)}
-      className="glass-card flex flex-col items-center text-center p-8 md:p-10 h-full group"
+      className="glass-card flex flex-col items-center text-center p-6 sm:p-8 md:p-10 h-full group"
     >
       {/* Title tag */}
       <p className="section-tag mb-5" style={{ fontSize: '0.65rem', letterSpacing: '0.32em' }}>{title}</p>
 
       {/* Photo */}
-      <div className="relative mb-7" style={{ width: 'min(180px,55vw)', height: 'min(180px,55vw)' }}>
+      <div className="relative mb-5 sm:mb-7" style={{ width: 'min(180px,52vw)', height: 'min(180px,52vw)' }}>
         {/* Orbiting rings */}
         <OrnamentRing cw size="105%" dur={24} opacity={0.18} />
         <OrnamentRing cw={false} size="85%" dur={16} opacity={0.12} />
@@ -58,8 +59,8 @@ function CoupleCard({ image, name, parentLine, title, bio, index, darkMode }) {
             src={image}
             alt={name}
             loading="lazy"
-            className="w-full h-full object-cover img-warm
-              transition-transform duration-700 group-hover:scale-110"
+            className="w-full h-full object-cover img-warm transition-transform duration-700 group-hover:scale-110"
+            style={{ objectPosition: facePosition }}
           />
         </div>
 
@@ -89,7 +90,8 @@ function CoupleCard({ image, name, parentLine, title, bio, index, darkMode }) {
       <div className="gold-divider w-24 mb-5" />
 
       {/* Bio */}
-      <p className="font-amiri text-lg leading-relaxed" style={{ color: darkMode ? 'var(--text-muted-dk)' : 'var(--text-muted)' }}>
+      <p className="font-amiri leading-relaxed"
+        style={{ fontSize: 'clamp(1rem, 2.5vw, 1.15rem)', color: darkMode ? 'rgba(232,220,196,0.9)' : '#3A3A3A', fontWeight: 400 }}>
         {bio}
       </p>
     </motion.div>
@@ -133,9 +135,19 @@ export default function Couple({ darkMode }) {
     <section
       ref={sectionRef}
       id="couple"
-      className="relative py-28 overflow-hidden site-section"
-      style={{ background: darkMode ? 'rgba(15,26,20,0.5)' : 'rgba(242,232,213,0.5)' }}
+      className="relative py-16 sm:py-28 overflow-hidden site-section"
     >
+      {/* Background image overlay */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${coupleBg})`,
+          filter: 'brightness(0.2) saturate(1.2)',
+          opacity: darkMode ? 0.5 : 0.3,
+        }} />
+      
+      <div className="absolute inset-0"
+        style={{ background: darkMode ? 'rgba(15,26,20,0.75)' : 'rgba(242,232,213,0.82)' }} />
+
       <motion.div
         className="absolute inset-0 islamic-pattern opacity-[0.05]"
         animate={{ opacity: [0.04, 0.07, 0.04] }}
@@ -150,7 +162,7 @@ export default function Couple({ darkMode }) {
       <div className="max-w-5xl mx-auto relative z-10 px-4 sm:px-6">
 
         {/* Heading */}
-        <div ref={headRef} className="text-center mb-16">
+        <div ref={headRef} className="text-center mb-10 sm:mb-16">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -194,15 +206,15 @@ export default function Couple({ darkMode }) {
           ref={cardsRef}
           className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-8 sm:gap-6 items-stretch"
         >
-          <CoupleCard image={groomImg} name="Md Suleman" parentLine="Son of Vahidul Rahman"
+          <CoupleCard image={groomImg} name="Md Suleman" parentLine="S/o Md. Wahidur Rahman"
             title="The Groom"
             bio="A man of faith, warmth, and deep devotion to his family and Deen. Known for his generous spirit and calm resolve, he is a blessing to all who know him."
-            index={0} darkMode={darkMode} />
+            index={0} darkMode={darkMode} facePosition="center 15%" />
           <CenterOrnament inView={cardsInView} />
-          <CoupleCard image={brideImg} name="Sofiya Fatima" parentLine="Daughter of Md Ashraf"
+          <CoupleCard image={brideImg} name="Sofiya Fatma" parentLine="D/o Jb. Md. Ashraf Sb."
             title="The Bride"
             bio="A woman of grace, piety, and quiet strength. She carries warmth in her smile and sincerity in her heart, cherished deeply by her family and loved ones."
-            index={1} darkMode={darkMode} />
+            index={1} darkMode={darkMode} facePosition="center top" />
         </div>
 
         {/* Quote strip */}
@@ -211,7 +223,7 @@ export default function Couple({ darkMode }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={VIEWPORT}
           transition={revealTransition(0.12)}
-          className="mt-16 text-center glass-card py-8 px-6 md:px-12"
+          className="mt-10 sm:mt-16 text-center glass-card py-6 sm:py-8 px-5 md:px-12"
         >
           <p className="font-amiri text-xl md:text-2xl italic leading-relaxed"
             style={{ color: darkMode ? 'rgba(232,201,126,0.75)' : 'var(--emerald)' }}>

@@ -3,6 +3,7 @@ import { motion, useInView } from 'framer-motion';
 import { FiCalendar, FiClock } from 'react-icons/fi';
 import { BsStarFill, BsMoonStarsFill } from 'react-icons/bs';
 import { GiFlowerPot } from 'react-icons/gi';
+import eventsBg from '../assets/events-bg.png';
 import { VIEWPORT, revealTransition } from '../motion/presets';
 
 const EVENTS = [
@@ -22,11 +23,11 @@ const EVENTS = [
   {
     id: 'baraat',
     icon: <BsMoonStarsFill size={26} />,
-    label: 'Baraat',
-    arabicLabel: 'البارات',
+    label: 'Dep. of Baraat',
+    arabicLabel: 'روانگی بارات',
     date: 'Thursday, 11 June 2026',
-    time: 'After Zuhr Namaaz',
-    description: "The groom's joyful procession arrives at the bride's venue. Lights, flowers, and blessings mark this most auspicious occasion.",
+    time: '11:00 AM',
+    description: "The groom's joyful procession departs for the bride's venue. Lights, flowers, and blessings mark this most auspicious occasion.",
     color: '#C9A84C',
     bgColor: 'rgba(201,168,76,0.09)',
     borderColor: 'rgba(201,168,76,0.28)',
@@ -36,9 +37,9 @@ const EVENTS = [
     id: 'walima',
     icon: <BsStarFill size={26} />,
     label: 'Walima Reception',
-    arabicLabel: 'الوليمة',
+    arabicLabel: 'دعوت ولیمہ',
     date: 'Friday, 12 June 2026',
-    time: 'After Zuhr Namaaz',
+    time: 'After Namaz-e-Juma',
     description: "Celebrate and share in the joy of this blessed union at the Walima banquet. Heartfelt food, prayers, and togetherness await.",
     color: '#1B6B47',
     bgColor: 'rgba(27,107,71,0.09)',
@@ -55,7 +56,7 @@ function EventCard({ event, index, darkMode }) {
       viewport={VIEWPORT}
       transition={revealTransition(index * 0.08)}
       whileHover={{ y: -6, transition: { duration: 0.35, ease: 'easeOut' } }}
-      className="glass-card group relative flex flex-col p-7 sm:p-8 h-full"
+      className="glass-card group relative flex flex-col p-5 sm:p-8 h-full"
       style={{
         borderColor: event.borderColor,
         boxShadow: `0 8px 36px rgba(0,0,0,0.06), 0 0 30px ${event.glow}`,
@@ -100,14 +101,14 @@ function EventCard({ event, index, darkMode }) {
 
       <div className="flex items-center gap-2 mb-2">
         <FiCalendar size={13} style={{ color: event.color }} />
-        <span className="font-inter text-sm" style={{ color: 'var(--text-muted)' }}>{event.date}</span>
+        <span className="font-inter text-sm font-medium" style={{ color: darkMode ? 'rgba(232,220,196,0.88)' : '#333' }}>{event.date}</span>
       </div>
       <div className="flex items-center gap-2 mb-5">
         <FiClock size={13} style={{ color: event.color }} />
-        <span className="font-inter text-sm font-semibold" style={{ color: event.color }}>{event.time}</span>
+        <span className="font-inter text-sm font-bold" style={{ color: event.color }}>{event.time}</span>
       </div>
 
-      <p className="font-inter text-sm leading-relaxed mt-auto" style={{ color: 'var(--text-muted)' }}>
+      <p className="font-inter text-sm leading-relaxed mt-auto" style={{ color: darkMode ? 'rgba(232,220,196,0.82)' : '#3A3A3A' }}>
         {event.description}
       </p>
 
@@ -129,13 +130,23 @@ export default function EventDetails({ darkMode }) {
     <section
       ref={sectionRef}
       id="events"
-      className="relative py-28 overflow-hidden site-section"
-      style={{ background: darkMode ? 'rgba(21,32,16,0.6)' : 'rgba(245,239,224,0.6)' }}
+      className="relative py-16 sm:py-28 overflow-hidden site-section"
     >
+      {/* Background image */}
+      <div className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${eventsBg})`,
+          filter: 'brightness(0.18) saturate(1.1)',
+          opacity: darkMode ? 0.5 : 0.35,
+        }} />
+      
+      <div className="absolute inset-0"
+        style={{ background: darkMode ? 'rgba(21,32,16,0.8)' : 'rgba(245,239,224,0.85)' }} />
+
       <div className="absolute inset-0 islamic-pattern opacity-[0.05]" />
 
       <div className="max-w-5xl mx-auto relative z-10 px-4 sm:px-6">
-        <div ref={ref} className="text-center mb-16">
+        <div ref={ref} className="text-center mb-10 sm:mb-16">
           <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ duration: 0.65 }}
             className="section-tag mb-3">
             Mark Your Calendar
